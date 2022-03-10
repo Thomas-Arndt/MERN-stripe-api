@@ -1,0 +1,1 @@
+This is a app using React.js, Express.js, and Node,js to work with the stripe payment processing api.
