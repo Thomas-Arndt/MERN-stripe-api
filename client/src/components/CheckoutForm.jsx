@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
     PaymentElement,
     useStripe,
@@ -8,6 +9,7 @@ import {
 const CheckoutForm = () => {
     const stripe = useStripe();
     const elements = useElements();
+    const history = useHistory();
 
     const [ message, setMessage ] = useState(null);
     const [ isLoading, setIsLoading ] = useState(false);
@@ -59,18 +61,18 @@ const CheckoutForm = () => {
 
         const { error } = await stripe.confirmPayment({
             elements,
-            confirmParams: {
-                return_url: "http://localhost:3000/payment-accepted"
-            }
+            redirect: "if_required"
         });
+        if(!error) {
+            history.push("/payment-accepted");
+        }
 
-        if(error.type === "card_error" || error.type === "validation_error") {
+        else if(error.type === "card_error" || error.type === "validation_error") {
             setMessage(error.message);
         } else {
             setMessage("An unexpected error occured.");
         }
 
-        setIsLoading(false);
     }
 
 
