@@ -63,16 +63,17 @@ const CheckoutForm = () => {
             elements,
             redirect: "if_required"
         });
+        
         if(!error) {
             history.push("/payment-accepted");
-        }
-
-        else if(error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message);
         } else {
-            setMessage("An unexpected error occured.");
+            if(error.type === "card_error" || error.type === "validation_error") {
+                setMessage(error.message);
+            } else {
+                setMessage("An unexpected error occured.");
+            }
+            setIsLoading(false);
         }
-
     }
 
 
